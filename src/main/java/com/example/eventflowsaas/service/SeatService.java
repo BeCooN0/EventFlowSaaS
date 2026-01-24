@@ -29,6 +29,9 @@ public class SeatService {
     @Transactional
     public List<SeatResponseDto> generateSeatsForEvent(Long eventId, Long rows, Long setsPerRow, BigDecimal price){
         Event event = eventRepository.findById(eventId).orElseThrow();
+        if (event.getSeats().isEmpty()){
+            throw new RuntimeException("seats already have on this event! get out of the box office right now!");
+        }
         List<Seat> seats = new ArrayList<>();
         for (Long i = 1L; i <= rows; i++) {
             for (Long i1 = 1L; i1 <= setsPerRow; i1++) {

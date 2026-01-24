@@ -12,11 +12,9 @@ import com.example.eventflowsaas.repository.BookingRepository;
 import com.example.eventflowsaas.repository.EventRepository;
 import com.example.eventflowsaas.repository.SeatRepository;
 import com.example.eventflowsaas.security.CustomUserDetails;
-import com.example.eventflowsaas.security.CustomUserDetailsServiceImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
