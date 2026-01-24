@@ -14,11 +14,10 @@ public class Booking extends BaseAuditEntity{
     private Long id;
     private BigDecimal price;
     private Long quantity;
-    @ManyToOne
-    private User user;
+    @Column(name = "user_id")
+    private Long userId;
     @ManyToOne
     private Event event;
     @ManyToOne
     private Seat seat;
-
 }

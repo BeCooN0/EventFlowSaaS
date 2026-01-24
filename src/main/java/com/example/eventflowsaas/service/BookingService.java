@@ -15,6 +15,7 @@ import com.example.eventflowsaas.security.CustomUserDetails;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.Instant;
 
 @Service
@@ -47,7 +48,7 @@ public class BookingService {
                 .orElseThrow(() -> new RuntimeException("Event not found"));
 
         Booking booking = new Booking();
-        booking.setUser(user);
+        booking.setUserId(user.getId());
         booking.setSeat(seat);
         booking.setEvent(event);
         booking.setPrice(seat.getPrice());
@@ -58,13 +59,17 @@ public class BookingService {
         return bookingMapper.toDto(saved);
     }
 
-
+    @Transactional
     public void cancelBooking(Long bookingId){
         try {
+            Booking booking = bookingRepository.findById(bookingId).orElseThrow();
+            Seat seat = booking.getSeat();
+            if (seat != null){
+                seat.setSeatStatus(SeatStatus.AVAILABLE);
+            }
             bookingRepository.deleteById(bookingId);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
 }

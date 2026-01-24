@@ -11,18 +11,15 @@ import com.example.eventflowsaas.security.CustomUserDetails;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 
 @Service
 public class EventService {
     private final EventMapper eventMapper;
     private final EventRepository eventRepository;
-    private final SeatRepository seatRepository;
 
     public EventService(EventMapper eventMapper, EventRepository eventRepository, SeatRepository seatRepository) {
         this.eventMapper = eventMapper;
         this.eventRepository = eventRepository;
-        this.seatRepository = seatRepository;
     }
 
     @Transactional

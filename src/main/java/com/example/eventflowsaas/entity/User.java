@@ -6,8 +6,10 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     @Column(nullable = false)
@@ -16,7 +18,8 @@ public class User {
     private UserRole role;
     @Column(nullable = false)
     private String email;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tenant_id")
     private Tenant tenant;
 }
 
