@@ -1,0 +1,15 @@
+package com.example.eventflowsaas;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+@SpringBootApplication
+@EnableJpaAuditing
+public class EventFlowSaaSApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(EventFlowSaaSApplication.class, args);
+    }
+
+}
