@@ -8,7 +8,6 @@ import com.example.eventflowsaas.entity.User;
 import com.example.eventflowsaas.mapper.UserMapper;
 import com.example.eventflowsaas.repository.UserRepository;
 import com.example.eventflowsaas.security.CustomUserDetails;
-import com.example.eventflowsaas.security.CustomUserDetailsServiceImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +20,6 @@ public class AuthenticationService {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private CustomUserDetailsServiceImpl customUserDetailsService;
     private final JwtService jwtService;
 
     public AuthenticationService(AuthenticationManager authenticationManager, UserMapper userMapper, UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {

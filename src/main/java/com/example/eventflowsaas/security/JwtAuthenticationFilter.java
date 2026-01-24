@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 String tenant = jwtService.getTenant(token);
                 if (tenant != null) {
-                    TenantContext.setTenant(tenant);
+                    CurrentTenant.setTenant(tenant);
                     String username = jwtService.getSubject(token);
                     UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
                     if (jwtService.validateToken(token, userDetails)) {
@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             log.warn(e.getMessage());
         }
         finally {
-            TenantContext.clear();
+            CurrentTenant.clear();
         }
     }
 

@@ -38,9 +38,13 @@ public class ConnectionProvider implements MultiTenantConnectionProvider<String>
     @Override
     public Connection getConnection(String s) throws SQLException {
         Connection anyConnection = getAnyConnection();
-        String valSchemaName = s.replaceAll("$[a-zAZ0-9_]", "");
-        anyConnection.createStatement().execute("SET search_path TO " + valSchemaName);
-        return null;
+        try {
+            anyConnection.createStatement().execute("SET search_path TO " + s);
+            throw new RuntimeException("Could not set schema to: " + s);
+        }catch (Exception e){
+            releaseAnyConnection(anyConnection);
+        }
+        return anyConnection;
     }
 
     @Override
@@ -50,9 +54,13 @@ public class ConnectionProvider implements MultiTenantConnectionProvider<String>
 
     @Override
     public void releaseConnection(String s, Connection connection) throws SQLException {
-        releaseAnyConnection(connection);
-        connection.createStatement().execute("SET search_path TO " + "public");
-        releaseAnyConnection(connection);
+        try {
+            connection.createStatement().execute("SET search_path TO " + "public");
+        } catch (SQLException e) {
+            throw new RuntimeException("Could not set search_path to public", e);
+        }finally {
+            releaseAnyConnection(connection);
+        }
     }
 
     @Override

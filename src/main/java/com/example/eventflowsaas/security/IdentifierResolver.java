@@ -14,7 +14,8 @@ public class IdentifierResolver implements CurrentTenantIdentifierResolver<Strin
 
     @Override
     public String resolveCurrentTenantIdentifier() {
-        return currentTenant.toString();
+        String tenant = CurrentTenant.getTenant();
+        return tenant != null ? tenant : "public";
     }
 
     @Override

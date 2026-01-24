@@ -11,14 +11,17 @@ public class CurrentTenant {
     }
 
     public static void setTenant(String name) {
-        String s = validateTenantName(name);
-        threadLocal.set(s);
+        if(name != null && validateTenantName(name)){
+            threadLocal.set(name);
+        }else {
+            threadLocal.set("public");
+        }
     }
 
     public static void clear(){
         threadLocal.remove();
     }
-    private static String validateTenantName(String s){
-       return s.replaceAll("[a-zAZ0-9_]", "");
+    private static boolean validateTenantName(String s){
+        return s!=null && s.matches("^[a-zA-Z0-9_]+$");
     }
 }

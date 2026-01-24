@@ -10,7 +10,6 @@ import org.mapstruct.MappingTarget;
 public interface EventMapper {
     @Mapping(source = "createdBy.id", target = "id")
     Event toEvent(EventRequestDto eventRequestDto);
-    @Mapping(source = "createdBy.id", target = "id")
     Event toUpdate(EventRequestDto eventRequestDto, @MappingTarget Event event);
     EventResponseDto toDto(Event event);
 }

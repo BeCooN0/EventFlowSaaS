@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,8 @@ public class Event extends BaseAuditEntity{
     @CreatedDate
     private Instant endTime;
     private String address;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private User createdBy;
-    private List<Seat> seats;
+    @Column(name = "created_by_id")
+    private Long createdById;
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Seat> seats = new ArrayList<>();
 }
