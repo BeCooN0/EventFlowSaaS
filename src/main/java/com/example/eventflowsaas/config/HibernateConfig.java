@@ -16,6 +16,8 @@ import java.util.Map;
 
 @Configuration
 public class HibernateConfig {
+
+    @Bean
     public LocalContainerEntityManagerFactoryBean factoryBean(DataSource dataSource, ConnectionProvider provider, IdentifierResolver identifierResolver){
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
