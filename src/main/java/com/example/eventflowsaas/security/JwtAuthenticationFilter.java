@@ -1,6 +1,6 @@
 package com.example.eventflowsaas.security;
 
-import com.example.eventflowsaas.JwtService;
+import com.example.eventflowsaas.service.BlockListTokenService;
 import io.jsonwebtoken.lang.Strings;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,9 +20,11 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected final JwtService jwtService;
     private final CustomUserDetailsServiceImpl customUserDetailsService;
-    public JwtAuthenticationFilter(JwtService jwtService, CustomUserDetailsServiceImpl customUserDetailsService) {
+    private final BlockListTokenService blockListTokenService;
+    public JwtAuthenticationFilter(JwtService jwtService, CustomUserDetailsServiceImpl customUserDetailsService, BlockListTokenService blockListTokenService) {
         this.jwtService = jwtService;
         this.customUserDetailsService = customUserDetailsService;
+        this.blockListTokenService = blockListTokenService;
     }
 
     @Override
@@ -30,6 +32,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = parseJwt(request);
         try {
         if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (blockListTokenService.isTokenInBlockList(token)){
+                filterChain.doFilter(request, response);
+                return;
+            }
                 String tenant = jwtService.getTenant(token);
                 if (tenant != null) {
                     CurrentTenant.setTenant(tenant);

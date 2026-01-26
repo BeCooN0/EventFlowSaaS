@@ -25,8 +25,8 @@ public class EventController {
         EventResponseDto eventResponseDto = eventService.addEvent(eventRequestDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
+                .path("/api/event/{id}")
                 .buildAndExpand(eventResponseDto.getId())
-                .expand("/id")
                 .toUri();
         return ResponseEntity.created(location).body(eventResponseDto);
     }

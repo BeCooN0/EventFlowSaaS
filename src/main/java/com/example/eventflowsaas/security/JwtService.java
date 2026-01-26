@@ -1,4 +1,4 @@
-package com.example.eventflowsaas;
+package com.example.eventflowsaas.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
