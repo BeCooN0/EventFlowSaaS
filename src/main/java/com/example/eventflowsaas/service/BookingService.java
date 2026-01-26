@@ -39,7 +39,7 @@ public class BookingService {
         CustomUserDetails principal = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = principal.getUser();
 
-        Seat seat = seatRepository.findById(bookingRequestDto.getSeatId())
+        Seat seat = seatRepository.findByIdWithLock(bookingRequestDto.getSeatId())
                 .orElseThrow(() -> new RuntimeException("Seat not found"));
 
         if (seat.getSeatStatus() != SeatStatus.AVAILABLE) {
