@@ -6,6 +6,7 @@ import com.example.eventflowsaas.entity.Booking;
 import com.example.eventflowsaas.entity.Event;
 import com.example.eventflowsaas.entity.Seat;
 import com.example.eventflowsaas.entity.User;
+import com.example.eventflowsaas.entity.enums.BookingStatus;
 import com.example.eventflowsaas.entity.enums.SeatStatus;
 import com.example.eventflowsaas.mapper.BookingMapper;
 import com.example.eventflowsaas.repository.BookingRepository;
@@ -55,6 +56,10 @@ public class BookingService {
         booking.setEvent(event);
         booking.setPrice(seat.getPrice());
         booking.setCreatedAt(Instant.now());
+        booking.setStatus(BookingStatus.PENDING);
+
+        seat.setSeatStatus(SeatStatus.RESERVED);
+
         seat.setSeatStatus(SeatStatus.SOLD);
 
         Booking saved = bookingRepository.save(booking);

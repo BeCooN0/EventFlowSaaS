@@ -1,5 +1,6 @@
 package com.example.eventflowsaas.entity;
 
+import com.example.eventflowsaas.entity.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,4 +21,6 @@ public class Booking extends BaseAuditEntity{
     private Event event;
     @ManyToOne
     private Seat seat;
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
 }
