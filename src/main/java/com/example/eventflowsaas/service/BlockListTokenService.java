@@ -25,5 +25,4 @@ public class BlockListTokenService {
     public boolean isTokenInBlockList(String token) {
         return token != null && Boolean.TRUE.equals(stringRedisTemplate.hasKey(REDIS_PREFIX + token));
     }
-
 }

@@ -29,7 +29,7 @@ public class BookingCleanupService {
         this.seatRepository = seatRepository;
     }
 
-    @Scheduled(fixedDelay = 60000L)
+    @Scheduled(fixedDelay = 60000L, cron = "0 0 0 * * *")
     public void processTenant() {
         List<String> allIds = tenantRepository.findAllIds();
         for (String tenant : allIds) {

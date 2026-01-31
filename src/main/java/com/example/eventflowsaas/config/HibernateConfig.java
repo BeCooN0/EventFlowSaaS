@@ -10,7 +10,6 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ import java.util.Map;
 public class HibernateConfig {
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean factoryBean(DataSource dataSource, ConnectionProvider provider, IdentifierResolver identifierResolver){
+    public LocalContainerEntityManagerFactoryBean factoryBean(ConnectionProvider provider, IdentifierResolver identifierResolver){
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         bean.setJpaVendorAdapter(adapter);
@@ -32,6 +31,6 @@ public class HibernateConfig {
     }
     @Bean
     public JpaTransactionManager transactionManager(EntityManagerFactory entityManagerFactory){
-        return new JpaTransactionManager();
+        return new JpaTransactionManager(entityManagerFactory);
     }
 }

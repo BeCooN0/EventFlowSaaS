@@ -1,7 +1,7 @@
 package com.example.eventflowsaas.dto;
 import lombok.Data;
 import java.math.BigDecimal;
-import java.util.function.LongFunction;
+import java.time.Instant;
 
 @Data
 public class BookingRequestDto {
@@ -9,6 +9,6 @@ public class BookingRequestDto {
     private Long eventId;
     private Long userId;
     private Long quantity;
-    private String createdAt;
+    private Instant createdAt;
     private Long seatId;
 }

@@ -51,5 +51,4 @@ public class AuthenticationService {
             log.warn("Invalid token for logout");
         }
     }
-
 }

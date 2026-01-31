@@ -13,6 +13,7 @@ import com.example.eventflowsaas.repository.BookingRepository;
 import com.example.eventflowsaas.repository.EventRepository;
 import com.example.eventflowsaas.repository.SeatRepository;
 import com.example.eventflowsaas.security.CustomUserDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,17 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 
 @Service
+@RequiredArgsConstructor
 public class BookingService {
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
     private final SeatRepository seatRepository;
     private final EventRepository eventRepository;
-    public BookingService(BookingRepository bookingRepository, BookingMapper bookingMapper, SeatRepository seatRepository, EventRepository eventRepository) {
-        this.bookingRepository = bookingRepository;
-        this.bookingMapper = bookingMapper;
-        this.seatRepository = seatRepository;
-        this.eventRepository = eventRepository;
-    }
+    private final EmailService emailService;
 
 
     @Transactional
@@ -44,7 +41,7 @@ public class BookingService {
                 .orElseThrow(() -> new RuntimeException("Seat not found"));
 
         if (seat.getSeatStatus() != SeatStatus.AVAILABLE) {
-            throw new RuntimeException("this is already Booking");
+            throw new RuntimeException("Seat is not available");
         }
 
         Event event = eventRepository.findById(bookingRequestDto.getEventId())
@@ -59,25 +56,23 @@ public class BookingService {
         booking.setStatus(BookingStatus.PENDING);
 
         seat.setSeatStatus(SeatStatus.RESERVED);
-
-        seat.setSeatStatus(SeatStatus.SOLD);
-
         Booking saved = bookingRepository.save(booking);
+
+        emailService.bookingConfirmationMessageSender(user.getEmail(), event.getTitle(), saved.getId());
+
         return bookingMapper.toDto(saved);
     }
 
     @Transactional
-    public void cancelBooking(Long bookingId){
-        try {
-            Booking booking = bookingRepository.findById(bookingId).orElseThrow();
-            Seat seat = booking.getSeat();
-            if (seat != null){
-                seat.setSeatStatus(SeatStatus.AVAILABLE);
-            }
-            bookingRepository.deleteById(bookingId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public void cancelBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        if (booking.getSeat() != null) {
+            booking.getSeat().setSeatStatus(SeatStatus.AVAILABLE);
         }
+
+        bookingRepository.delete(booking);
     }
     public Page<BookingResponseDto> getAllBookingsForUser(Pageable pageable){
         CustomUserDetails principal = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
